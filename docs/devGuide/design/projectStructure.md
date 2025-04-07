@@ -72,11 +72,25 @@ The CLI application uses and further builds on the interface exposed by the core
 
 ### MarkBind core-web library
 
-This package houses the various frontend assets used in the core package.
+This package houses the various frontend assets used in the core package. It bundles all the essential client-side assets and UI logic needed for rendering and enhancing the generated static sites. It also builds a Node-compatible bundle of Vue components and app setup logic which is used by MarkBind's server-side renderer to pre-render pages during the build process.
 
-Some external assets included are Vue.js, Bootstrap bundles, and FontAwesome bundles.
+**External Assets include:**
+* Vue.js runtime (client side)
+* Bootstrap and FontAwesome bundles
 
-Internal bundles are also present, generated from setup scripts, custom stylesheets and the UI components library.
+**Internal Assets include:**
+* Custom stylesheets and component styles
+* Client-side setup scripts (`src/index.js`)
+* Render logic bootstrapped from MarkBind's Vue server renderer
+* Core UI component library used in templates and sites
+
+The `core-web` library is bundled via [Webpack](https://webpack.js.org/) using specific configurations. The final output of this package includes:
+* `markbind.min.js` — The main client-side JS bundle
+* `markbind.min.css` — Minified CSS styles
+* `vueCommonAppFactory.min.js` — Server-compatible bundle that sets up the Vue app for SSR rendering.
+* Supporting fonts and static assets
+
+The client-side bundles and assets are referenced in every generated MarkBind page to enable dynamic enhancements and consistent styling.
 
 ### UI components library
 
@@ -86,7 +100,7 @@ We forked it from the original [yuche/vue-strap](https://github.com/yuche/vue-st
 
 **The key dependencies used are:**
 
-* [Vue.js](http://vuejs.org/) (required ^v2.x.x, test with v2.6.14).
+* [Vue.js](http://vuejs.org/) (required ^v3.x.x, test with v3.3.11).
 
 * [Bootstrap CSS](http://getbootstrap.com/) (required 5.x.x, test with 5.1.3). MarkBind's Vue components doesn't depend on a very precise version of Bootstrap.
 
