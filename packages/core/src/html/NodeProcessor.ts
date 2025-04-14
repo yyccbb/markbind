@@ -237,6 +237,8 @@ export class NodeProcessor {
       case 'page-nav-print':
         PageNavProcessor.transformPrintContainer(node);
         break;
+      case 'pdf-download':
+        break;
       case 'site-nav':
         renderSiteNav(node);
         break;

@@ -36,6 +36,7 @@ import modal from './Modal.vue';
 import scrollTopButton from './ScrollTopButton.vue';
 import cardstack from './cardstack/CardStack.vue';
 import card from './cardstack/Card.vue';
+import PdfDownload from './PdfDownload.vue';
 
 const components = {
   box,
@@ -62,6 +63,7 @@ const components = {
   submenu,
   siteNavButton,
   pageNavButton,
+  PdfDownload,
   overlay,
   overlaySource,
   popover,

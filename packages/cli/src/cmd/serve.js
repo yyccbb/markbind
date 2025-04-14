@@ -1,12 +1,15 @@
 const chokidar = require('chokidar');
 const path = require('path');
 const readline = require('readline');
+const express = require('express');
+const bodyParser = require('body-parser');
 
 const { Site } = require('@markbind/core');
 const { pageVueServerRenderer } = require('@markbind/core/src/Page/PageVueServerRenderer');
 
 const fsUtil = require('@markbind/core/src/utils/fsUtil');
 const { INDEX_MARKDOWN_FILE } = require('@markbind/core/src/Site/constants');
+const pdfGenerator = require('../util/pdfGenerator');
 
 const cliUtil = require('../util/cliUtil');
 const liveServer = require('../lib/live-server');
@@ -87,7 +90,43 @@ function serve(userSpecifiedRoot, options) {
     root: outputFolder,
     port: options.port || 8080,
     host: options.address || '127.0.0.1',
-    middleware: [],
+    middleware: [
+      (req, res, next) => {
+        // Only handle API requests for PDF generation
+        if (req.url === '/api/generate-pdf') {
+          const app = express();
+          app.use(bodyParser.json());
+
+          app.post('/api/generate-pdf', async (req, res) => {
+            try {
+              const { url, filename } = req.body;
+
+              if (!url) {
+                return res.status(400).json({ error: 'URL is required' });
+              }
+
+              logger.info(`Generating PDF for: ${url}`);
+              const pdfBuffer = await pdfGenerator.generatePdf(url);
+
+              // IMPORTANT: Correctly send binary data
+              res.setHeader('Content-Type', 'application/pdf');
+              res.setHeader('Content-Disposition', `attachment; filename="${filename || 'document.pdf'}"`);
+              res.setHeader('Content-Length', pdfBuffer.length);
+
+              // Use res.end() with the buffer directly instead of res.send()
+              res.end(pdfBuffer);
+            } catch (error) {
+              logger.error(`PDF generation error: ${error.message}`);
+              res.status(500).json({ error: 'Failed to generate PDF' });
+            }
+          });
+
+          return app(req, res, next);
+        }
+
+        return next();
+      },
+    ],
     mount: [],
   };
 

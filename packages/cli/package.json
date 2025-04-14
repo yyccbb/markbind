@@ -40,7 +40,10 @@
     "lodash": "^4.17.15",
     "url-parse": "^1.5.10",
     "winston": "^2.4.4",
-    "winston-daily-rotate-file": "^3.10.0"
+    "winston-daily-rotate-file": "^3.10.0",
+    "puppeteer": "^24.0.0",
+    "express": "^4.18.2",
+    "body-parser": "^1.20.2"
   },
   "devDependencies": {
     "@types/url-parse": "^1.4.8",
